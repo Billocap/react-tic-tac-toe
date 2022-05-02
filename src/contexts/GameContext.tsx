@@ -10,6 +10,7 @@ interface GameContext {
   board: string[],
   setBoard: Dispatch<SetStateAction<string[]>>,
   setCell(id: number): void,
+  replay(): void,
   [index: string]: any
 }
 
@@ -22,15 +23,20 @@ export default function GameController({ children }: Props) {
 
   const context: GameContext = {
     board, setBoard, player, winner,
+    replay() {
+      setBoard(new Array(9).fill(" "))
+
+      setPlayer("X")
+
+      setWinner("")
+    },
     setCell(id: number) {
       setBoard(prev => {
         if (prev[id] != " " || winner) return prev
 
         prev.splice(id, 1, player)
         
-        const boardState = prev.map(n => n == player ? 1 : 0).join("")
-
-        console.log(boardState)
+        const boardState = prev.map(n => Number(n == player)).join("")
         
         if (checkForWin(parseInt(boardState, 2))) {
           setWinner(player)
