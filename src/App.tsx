@@ -1,4 +1,4 @@
-import { Fragment, useContext } from "react"
+import { CSSProperties, Fragment, useContext } from "react"
 
 import GameBoard from "./components/GameBoard"
 import { GameContext } from "./contexts/GameContext"
@@ -14,8 +14,8 @@ export default function App() {
       `Draw` :
     `Player ${player}'s turn`
 
-  const replayStyle = {
-    display: winner ? "block" : "none"
+  const replayStyle: CSSProperties = {
+    visibility: winner ? "visible" : "hidden"
   }
 
   return (
@@ -23,7 +23,7 @@ export default function App() {
       <span>{status}</span>
       <GameBoard/>
       <button id="replay" style={replayStyle} onClick={() => replay()}>
-        Replay
+        Play Again
       </button>
     </Fragment>
   )
