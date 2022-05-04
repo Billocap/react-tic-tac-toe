@@ -1,5 +1,5 @@
 export default function GameHistory({history, onClick}: any) {
-  const histItems = history.map( (item, index) => {
+  const histItems = history.map((item: any, index: number) => {
     return (
       <li>
         <a onClick={ _ => onClick(item, index)}>

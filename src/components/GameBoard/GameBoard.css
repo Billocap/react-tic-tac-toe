@@ -1,7 +1,19 @@
 #board {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, 70px);
   grid-template-rows: repeat(3, 70px);
   gap: 5px;
   padding: 25px;
+}
+
+#result {
+  position: absolute;
+  margin: 25px;
+}
+
+.result-line {
+  stroke: rgb(32, 32, 32);
+  stroke-width: 1px;
+  animation: draw-line ease-in-out 0.2s both;
 }

@@ -17,18 +17,21 @@ interface GameContext {
 export const GameContext = createContext({} as GameContext)
 
 export default function GameController({ children }: Props) {
-  const [board, setBoard] = useState<string[]>(new Array(9).fill(" "))
+  const [board, setBoard] = useState(new Array<string>(9).fill(" "))
   const [player, setPlayer] = useState("X")
   const [winner, setWinner] = useState("")
+  const [winState, setWinState] = useState(0)
 
   const context: GameContext = {
-    board, setBoard, player, winner,
+    board, setBoard, player, winner, winState,
     replay() {
-      setBoard(new Array(9).fill(" "))
+      setBoard(new Array<string>(9).fill(" "))
 
       setPlayer("X")
 
       setWinner("")
+
+      setWinState(0)
     },
     setCell(id: number) {
       setBoard(prev => {
@@ -37,9 +40,12 @@ export default function GameController({ children }: Props) {
         prev.splice(id, 1, player)
         
         const boardState = prev.map(n => Number(n == player)).join("")
+
+        const winState = checkForWin(parseInt(boardState, 2))
         
-        if (checkForWin(parseInt(boardState, 2))) {
+        if (winState) {
           setWinner(player)
+          setWinState(winState)
         } else if (prev.includes(" ")) {
           setPlayer(player == "X" ? "O" : "X")
         } else {
