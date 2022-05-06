@@ -6,23 +6,23 @@ import { GameContext } from "./contexts/GameContext"
 import "./App.css"
 
 export default function App() {
-  const { player, winner, replay } = useContext(GameContext)
+  const { player, winner, replay, gameIsRunning } = useContext(GameContext)
 
-  const status = winner ?
-    winner != "none" ?
+  const status = !gameIsRunning ?
+    winner ?
       `Winner is player ${winner}` :
       `Draw` :
     `Player ${player}'s turn`
 
-  const replayStyle: CSSProperties = {
-    visibility: winner ? "visible" : "hidden"
+  const replayButtonStyle: CSSProperties = {
+    visibility: !gameIsRunning ? "visible" : "hidden"
   }
 
   return (
     <Fragment>
       <span>{status}</span>
       <GameBoard/>
-      <button id="replay" style={replayStyle} onClick={() => replay()}>
+      <button id="replay" style={replayButtonStyle} onClick={() => replay()}>
         Play Again
       </button>
     </Fragment>

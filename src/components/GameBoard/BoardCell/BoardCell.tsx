@@ -3,12 +3,13 @@ import { useContext } from "react"
 import { GameContext } from "../../../contexts/GameContext"
 
 import "./BoardCell.css"
-interface Props {
+
+interface BoardCellProps {
   value: string,
   index: number
 }
 
-export default function BoardCell({ value, index }: Props) {
+export default function BoardCell({ value, index }: BoardCellProps) {
   const { setCell } = useContext(GameContext)
 
   const handleClick = () => {
@@ -26,7 +27,7 @@ export default function BoardCell({ value, index }: Props) {
                 <stop offset="100%" stopColor="#E80C1F"/>
               </linearGradient>
             </defs>
-
+            
             <line className="line" x1="3" y1="3" x2="27" y2="27"/>
             <line className="line" x1="27" y1="3" x2="3" y2="27"/>
           </svg>

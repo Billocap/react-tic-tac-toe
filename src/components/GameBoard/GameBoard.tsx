@@ -57,14 +57,14 @@ const winStates: any = {
 }
 
 export default function GameBoard() {
-  const { board, winState } = useContext(GameContext)
+  const { board, winState, gameIsRunning } = useContext(GameContext)
 
-  const rowSquares = board.map((cell, index) => {
+  const boardCells = board.map((cell, index) => {
     return <BoardCell key={index} index={index} value={cell}/>
   })
 
-  const Overlay = () => {
-    if (!winState) return null
+  function Overlay() {
+    if (gameIsRunning) return null
 
     return (
       <svg viewBox="0 0 30 30" id="result">
@@ -76,7 +76,7 @@ export default function GameBoard() {
   return (
     <div id="board">
       <Overlay/>
-      {rowSquares}
+      {boardCells}
     </div>
   )
 }
