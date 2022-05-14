@@ -1,7 +1,6 @@
 import { createContext, useReducer } from "react"
 
-import boardStateToBinary from "../lib/boardStateToBinary"
-import checkForWin from "../lib/checkForWin"
+import GameStateAdapter from "../lib/GameStateAdapter"
 import gameStateReducer, { initialGameState } from "../model/GameModel"
 
 interface GameControllerProps {
@@ -18,6 +17,8 @@ export const GameContext = createContext({} as GameContext)
 export default function GameController({ children }: GameControllerProps) {
   const [gameState, dispatchGameState] = useReducer(gameStateReducer, initialGameState)
 
+  const gameStateAdapter = new GameStateAdapter(gameState)
+
   const context: GameContext = {
     ...gameState,
     replay() {
@@ -25,41 +26,34 @@ export default function GameController({ children }: GameControllerProps) {
         type: "RESET"
       })
     },
-    setCell(id: number) {
-      const boardState = gameState.board.slice()
-      
-      if (boardState[id] != " " || !gameState.gameIsRunning) return
-
-      boardState.splice(id, 1, gameState.player)
-
-      const binaryBoardState = boardStateToBinary(boardState, gameState.player)
-
-      const winState = checkForWin(binaryBoardState)
-
-      if (winState) {
+    setCell(cellId: number) {
+      if (gameStateAdapter.isMoveValid(cellId)) {
+        gameStateAdapter.setCell(cellId)
+  
+        const turnResult = gameStateAdapter.turnResult
+  
+        if (turnResult.winState) {
+          dispatchGameState({
+            type: "PLAYER_WON",
+            value: turnResult
+          })
+        } else if (!gameStateAdapter.isBoardFull) {
+          dispatchGameState({
+            type: "TOGGLE_PLAYER"
+          })
+        } else {
+          dispatchGameState({
+            type: "STOP"
+          })
+        }
+  
         dispatchGameState({
-          type: "PLAYER_WON",
+          type: "SET_BOARD",
           value: {
-            winState,
-            player: gameState.player
+            board: gameStateAdapter.boardState
           }
         })
-      } else if (boardState.includes(" ")) {
-        dispatchGameState({
-          type: "TOGGLE_PLAYER"
-        })
-      } else {
-        dispatchGameState({
-          type: "STOP"
-        })
       }
-
-      dispatchGameState({
-        type: "SET_BOARD",
-        value: {
-          board: boardState
-        }
-      })
     }
   }
 

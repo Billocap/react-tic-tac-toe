@@ -1,8 +1,8 @@
 export const initialGameState: GameState = {
-  gameIsRunning: true,
+  isGameRunning: true,
   player: "X",
   winner: "",
-  winState: 0,
+  winState: null,
   board: [
     " ", " ", " ",
     " ", " ", " ",
@@ -25,11 +25,12 @@ export default function gameStateReducer(state: GameState, action: GameStateActi
     case "PLAYER_WON":
       newState.winner = action.value.player
       newState.winState = action.value.winState
-      newState.gameIsRunning = false
+      
+      newState.isGameRunning = false
       break
 
     case "STOP":
-      newState.gameIsRunning = false
+      newState.isGameRunning = false
       break
     
     case "RESET":

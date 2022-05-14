@@ -6,16 +6,16 @@ import { GameContext } from "./contexts/GameContext"
 import "./App.css"
 
 export default function App() {
-  const { player, winner, replay, gameIsRunning } = useContext(GameContext)
+  const { player, winner, replay, isGameRunning } = useContext(GameContext)
 
-  const status = !gameIsRunning ?
+  const status = !isGameRunning ?
     winner ?
       `Winner is player ${winner}` :
       `Draw` :
     `Player ${player}'s turn`
 
   const replayButtonStyle: CSSProperties = {
-    visibility: !gameIsRunning ? "visible" : "hidden"
+    visibility: !isGameRunning ? "visible" : "hidden"
   }
 
   return (
