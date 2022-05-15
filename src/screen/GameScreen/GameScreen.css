@@ -1,0 +1,35 @@
+#game {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#close {
+  position: absolute;
+  right: 0.5rem;
+  background: none;
+  border: none;
+}
+
+#replay {
+  border-radius: 50%;
+  font-size: 16px;
+  padding: 0.25rem 0.25rem 0 0.25rem;
+  background: none;
+  border: none;
+}
+
+#replay:hover {
+  animation: rotate 0.3s ease-in-out;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  
+  to {
+    transform: rotate(180deg);
+  }
+}

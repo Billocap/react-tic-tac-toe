@@ -53,7 +53,7 @@ export default function BoardCell({ value, index }: BoardCellProps) {
   }
 
   return (
-    <button onClick={handleClick}>
+    <button onClick={handleClick} className="board-cell">
       {getPlayer()}
     </button>
   )

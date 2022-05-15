@@ -1,0 +1,47 @@
+#menu {
+  display: grid;
+  gap: 0.25rem;
+  grid-template-columns: repeat(2, 7rem);
+  grid-template-rows: auto repeat(2, 6rem);
+  grid-template-areas: "header header" "tl tr" "bl br";
+}
+
+#header {
+  grid-column: span 2;
+  text-align: center;
+  grid-area: header;
+  padding: 0.5rem;
+}
+
+#menu button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.l {
+  grid-row: tl / bl;
+  grid-column: 1;
+}
+
+.r {
+  grid-row: tr / br;
+  grid-column: 2;
+}
+
+.tl {
+  grid-area: tl;
+}
+
+.tr {
+  grid-area: tr;
+}
+
+.bl {
+  grid-area: bl;
+}
+
+.br {
+  grid-area: br;
+}

@@ -1,30 +1,22 @@
-import { CSSProperties, Fragment, useContext } from "react"
+import { Fragment, useState } from "react"
 
-import GameBoard from "./components/GameBoard"
-import { GameContext } from "./contexts/GameContext"
-
-import "./App.css"
+import GameScreen from "./screen/GameScreen"
+import MenuScreen from "./screen/MenuScreen"
+import GameController from "./contexts/GameContext"
 
 export default function App() {
-  const { player, winner, replay, isGameRunning } = useContext(GameContext)
+  const [screen, setScreen] = useState("menu")
 
-  const status = !isGameRunning ?
-    winner ?
-      `Winner is player ${winner}` :
-      `Draw` :
-    `Player ${player}'s turn`
-
-  const replayButtonStyle: CSSProperties = {
-    visibility: !isGameRunning ? "visible" : "hidden"
+  const screens: any = {
+    game:<GameController>
+      <GameScreen navigate={() => setScreen("menu")}/>
+    </GameController>,
+    menu: <MenuScreen navigate={() => setScreen("game")}/>
   }
 
   return (
     <Fragment>
-      <span>{status}</span>
-      <GameBoard/>
-      <button id="replay" style={replayButtonStyle} onClick={() => replay()}>
-        Play Again
-      </button>
+      {screens[screen]}
     </Fragment>
   )
 }
