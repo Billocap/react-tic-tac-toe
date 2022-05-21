@@ -1,13 +1,25 @@
+import boardStateToBinary from "./boardStateToBinary"
 import checkForWin from "./checkForWin"
+
+type SubscriberType = "human" | "ai"
+
+interface Subscriber {
+  type: SubscriberType,
+  action: (...args: any[]) => void
+}
 
 export default class GameStateAdapter {
   private state: GameState
+  private subscribers: Map<PlayerValues, Subscriber>
 
-  constructor(state: GameState) {
-    this.state = {
-      ...state,
-      board: state.board.slice()
-    }
+  constructor() {
+    this.state = {} as any
+
+    this.subscribers = new Map()
+  }
+  
+  private get boardStateToBinary() {
+    return boardStateToBinary(this.boardState, this.player)
   }
 
   get boardState() {
@@ -20,20 +32,6 @@ export default class GameStateAdapter {
 
   get player() {
     return this.state.player
-  }
-  
-  /**
-   * Binary number that represents the board state relative to the current player.
-   * 
-   * For example the state `["X", "O", " ", " ", " ", " ", " ", "X", "O"]` is converted
-   * to `0b100000010` in relation to `"X"` and `0b010000001` in relation to `"O"`.
-   */
-  get boardStateToBinary() {
-    const filteredBoardState = this.boardState.map(n => {
-      return Number(n == this.player)
-    })
-
-    return parseInt(filteredBoardState.join(""), 2)
   }
 
   get isBoardFull() {
@@ -59,5 +57,34 @@ export default class GameStateAdapter {
 
   setCell(cellId: number) {
     this.boardState.splice(cellId, 1, this.player)
+  }
+
+  setBoard(boardState: BoardCellValues[]) {
+    this.state.board = boardState
+  }
+
+  updateState(state: GameState) {
+    this.state = {
+      ...state,
+      board: state.board.slice()
+    }
+  }
+  
+  onNotification() {}
+
+  subscribe(player: PlayerValues, type: SubscriberType, action: (...args: any[]) => void) {
+    this.subscribers.set(player, {type, action})
+  }
+
+  notify(player: PlayerValues, type: SubscriberType, ...args: any[]) {
+    if (this.player != player) return
+
+    const subscriber = this.subscribers.get(player)
+
+    if (subscriber && subscriber.type == type) {
+      subscriber.action(args)
+
+      this.onNotification()
+    }
   }
 }
